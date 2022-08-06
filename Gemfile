@@ -32,6 +32,10 @@ gem "jbuilder"
 
 gem "devise"
 
+gem "geocoder"
+
+gem "money-rails", "~>1.12"
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
