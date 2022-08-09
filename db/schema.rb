@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_07_173856) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_09_030754) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_07_173856) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "favorites", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "property_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["property_id", "user_id"], name: "index_favorites_on_property_id_and_user_id", unique: true
+    t.index ["property_id"], name: "index_favorites_on_property_id"
+    t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -73,7 +83,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_07_173856) do
     t.string "zip_code"
     t.integer "price_cents"
     t.string "price_currency"
+    t.integer "reviews_count"
+    t.decimal "average_rating"
     t.index ["latitude", "longitude"], name: "index_properties_on_latitude_and_longitude"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.string "title"
+    t.text "body"
+    t.integer "rating"
+    t.bigint "reviewable_id"
+    t.string "reviewable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reviewable_id", "reviewable_type"], name: "index_reviews_on_reviewable_id_and_reviewable_type"
   end
 
   create_table "users", force: :cascade do |t|
@@ -90,5 +113,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_07_173856) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "favorites", "properties"
+  add_foreign_key "favorites", "users"
   add_foreign_key "profiles", "users"
 end

@@ -8,5 +8,7 @@ Rails.application.routes.draw do
    namespace :api do
     resources :users, only: :show
     get "/users_by_emails/" => "users_by_emails#show", as: :users_by_email
-   end
+   
+    resources :favorites, only: [:create, :destroy]
+  end
 end
