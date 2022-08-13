@@ -1,4 +1,7 @@
 class Property < ApplicationRecord
+    CLEANING_FEE = 5_000.freeze
+    CLEANING_FEE_MONEY = Money.new(CLEANING_FEE)
+    SERVICE_FEE_PERCENTAGE = 0.08.freeze
     validates :name, presence: true
     validates :headline, presence: true
     validates :description, presence: true
@@ -38,5 +41,11 @@ class Property < ApplicationRecord
     
         Date.tomorrow.strftime(date_format)..next_reservation.reservation_date.strftime(date_format)
     end
+
+    def service_fee
+        
+    end
+
+    
 
 end
