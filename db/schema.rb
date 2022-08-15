@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_09_030754) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_14_223348) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,22 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_09_030754) do
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
+  create_table "payments", force: :cascade do |t|
+    t.bigint "reservation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "subtotal_cents"
+    t.string "subtotal_currency"
+    t.integer "cleaning_fee_cents"
+    t.string "cleaning_fee_currency"
+    t.integer "service_fee_cents"
+    t.string "service_fee_currency"
+    t.integer "total_cents"
+    t.string "total_currency"
+    t.string "stripe_id"
+    t.index ["reservation_id"], name: "index_payments_on_reservation_id"
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "address_1"
@@ -83,9 +99,21 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_09_030754) do
     t.string "zip_code"
     t.integer "price_cents"
     t.string "price_currency"
-    t.integer "reviews_count"
-    t.decimal "average_rating"
+    t.integer "reviews_count", default: 0, null: false
+    t.decimal "average_rating", default: "0.0", null: false
     t.index ["latitude", "longitude"], name: "index_properties_on_latitude_and_longitude"
+  end
+
+  create_table "reservations", force: :cascade do |t|
+    t.bigint "property_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "checkin_date"
+    t.date "checkout_date"
+    t.integer "nights"
+    t.index ["property_id"], name: "index_reservations_on_property_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -96,7 +124,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_09_030754) do
     t.string "reviewable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["reviewable_id", "reviewable_type"], name: "index_reviews_on_reviewable_id_and_reviewable_type"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -107,6 +137,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_09_030754) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "stripe_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -115,5 +148,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_09_030754) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "favorites", "properties"
   add_foreign_key "favorites", "users"
+  add_foreign_key "payments", "reservations"
   add_foreign_key "profiles", "users"
+  add_foreign_key "reservations", "properties"
+  add_foreign_key "reservations", "users"
+  add_foreign_key "reviews", "users"
 end

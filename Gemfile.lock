@@ -103,6 +103,10 @@ GEM
       responders
       warden (~> 1.2.3)
     digest (3.1.0)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     erubi (1.11.0)
     ffi (1.15.5-x64-mingw32)
     geocoder (1.8.0)
@@ -230,6 +234,11 @@ GEM
       sprockets (>= 3.0.0)
     stimulus-rails (1.1.0)
       railties (>= 6.0.0)
+    stripe (7.0.0)
+    stripe-rails (2.3.4)
+      rails (>= 5.1)
+      responders
+      stripe (>= 3.15.0)
     strscan (3.0.4)
     tailwindcss-rails (2.0.10-x64-mingw32)
       railties (>= 6.0.0)
@@ -271,6 +280,7 @@ DEPENDENCIES
   capybara
   debug
   devise
+  dotenv-rails
   faker!
   geocoder
   image_processing (~> 1.2)
@@ -285,6 +295,7 @@ DEPENDENCIES
   selenium-webdriver
   sprockets-rails
   stimulus-rails
+  stripe-rails
   tailwindcss-rails
   turbo-rails
   tzinfo-data

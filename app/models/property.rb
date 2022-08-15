@@ -1,4 +1,7 @@
 class Property < ApplicationRecord
+    CLEANING_FEE = 5_000.freeze
+    CLEANING_FEE_MONEY = Money.new(CLEANING_FEE)
+    SERVICE_FEE_PERCENTAGE = 0.08.freeze
     validates :name, presence: true
     validates :headline, presence: true
     validates :description, presence: true
@@ -13,6 +16,9 @@ class Property < ApplicationRecord
     has_many :favorites, dependent: :destroy
     has_many :favorited_users, through: :favorites, source: :user
 
+    has_many :reservations, dependent: :destroy
+    has_many :reserved_users, through: :reservations, source: :user
+    has_many :payments, through: :reservations
     geocoded_by :address
     after_validation :geocode, if: -> { latitude.blank? && longitude.blank? }
     def address
@@ -26,6 +32,6 @@ class Property < ApplicationRecord
     def favorited_by?(user)
         return if user.nil?
         favorited_users.include?(user)
-    end
+    end 
 
 end

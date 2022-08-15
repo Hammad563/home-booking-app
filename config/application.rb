@@ -18,5 +18,9 @@ module Airbnb
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # stripe key
+    config.stripe.secret_key = ENV["STRIPE_SECRET_KEY"]
+    config.stripe.publishable_key = ENV["STRIPE_PUBLISHABLE_KEY"]
   end
 end
