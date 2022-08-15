@@ -9,7 +9,7 @@
           <div class="flex items-center">
             <%
               property_star_classes = ["text-gray-300", "text-gray-300", "text-gray-300", "text-gray-300", "text-gray-300"]
-              @property.average_rating.round(0).to_i.times do |i|
+              (@property.average_rating&.round(0) || 0 ).to_i.times do |i|
                 property_star_classes[i] = "text-yellow-400"
               end
             %>
@@ -20,7 +20,7 @@
               </svg>
             <% end %>
           </div>
-          <p class="sr-only"><%= @property.average_rating.round(0) %> out of 5 stars</p>
+          <p class="sr-only"><%= @property.average_rating&.round(0) || 0 %> out of 5 stars</p>
         </div>
         <p class="ml-2 text-sm text-gray-900">Based on <%= @property.reviews_count %> reviews</p>
       </div>

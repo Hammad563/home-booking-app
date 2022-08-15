@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :reserved_properties, through: :reservations, source: :property
   has_many :reviews, dependent: :destroy
 
+  has_many :payments, through: :reservations
   
 
   after_create :create_profile

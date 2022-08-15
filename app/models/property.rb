@@ -18,7 +18,7 @@ class Property < ApplicationRecord
 
     has_many :reservations, dependent: :destroy
     has_many :reserved_users, through: :reservations, source: :user
-
+    has_many :payments, through: :reservations
     geocoded_by :address
     after_validation :geocode, if: -> { latitude.blank? && longitude.blank? }
     def address
@@ -32,20 +32,6 @@ class Property < ApplicationRecord
     def favorited_by?(user)
         return if user.nil?
         favorited_users.include?(user)
-    end
-
-    def available_dates
-        date_format = "%b %e"
-        next_reservation = reservations.future_reservations.first
-        return Date.tomorrow.strftime(date_format)..Date.today.end_of_year.strftime(date_format) if next_reservation.nil?
-    
-        Date.tomorrow.strftime(date_format)..next_reservation.reservation_date.strftime(date_format)
-    end
-
-    def service_fee
-        
-    end
-
-    
+    end 
 
 end
